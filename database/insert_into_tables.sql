@@ -175,20 +175,92 @@ VALUES (2222222, 'José Barbosa', 'APRESENTADOR', '(11)3356-9842', 40, 'Rua dos 
 INSERT INTO FUNCIONARIOS (CPF, NOME, TIPO, TELEFONE, HORAS_TRAB, ENDERECO, TURNO)
 VALUES (3333333, 'Joel Carvalho', 'TÉCNICO', '(11)3356-9843', 50, 'Rua dos Tratores, 30', 'Manhã');
 
--- Tabela POSSUI 
+INSERT INTO FUNCIONARIOS (CPF, NOME, TIPO, TELEFONE, HORAS_TRAB, ENDERECO, TURNO)
+VALUES (4444444, 'Jonas Carvalho', 'TÉCNICO', '(11)3356-9833', 55, 'Rua dos Tratores, 31', 'Manhã');
+
+INSERT INTO FUNCIONARIOS (CPF, NOME, TIPO, TELEFONE, HORAS_TRAB, ENDERECO, TURNO)
+VALUES (5555555, 'João Arriba', 'APRESENTADOR', '(11)3356-9832', 40, 'Rua dos Cachorros, 22', 'Noite');
+
+-- Tabela POSSUI
+-- 	Inserindo 3 funcionarios a um palco (palco 2) e um funcionário aos outros palcos 
+INSERT INTO POSSUI (PALCO, FUNCIONARIO)
+VALUES (2, 2222222);
+
+INSERT INTO POSSUI (PALCO, FUNCIONARIO)
+VALUES (3, 2222222);
+
+INSERT INTO POSSUI (PALCO, FUNCIONARIO)
+VALUES (2, 3333333);
+
+INSERT INTO POSSUI (PALCO, FUNCIONARIO)
+VALUES (4, 1111111);
+
+INSERT INTO POSSUI (PALCO, FUNCIONARIO)
+VALUES (2, 1111111);
 
 -- Tabela TECNICO 
+-- 	Inserindo uma especialização aos funcionários que são técnicos
+INSERT INTO TECNICO (CPF, ESPECIALIZACAO)
+VALUES (3333333, 'Audiovisual');
 
--- Tabela APRESENTADOR 
+INSERT INTO TECNICO (CPF, ESPECIALIZACAO)
+VALUES (4444444, 'Elétrica');
 
--- Tabela JURADOS 
+-- Tabela APRESENTADOR
+-- 	Inserindo um tempo de palco aos funcionários que são apresentadores
+INSERT INTO APRESENTADOR (CPF, TEMPO_PALCO)
+VALUES (2222222, 20);
+
+INSERT INTO APRESENTADOR (CPF, TEMPO_PALCO)
+VALUES (5555555, 5);
+
+-- Tabela JURADOS
+-- 	Adicionando Jurados que irão julgar os competidores nas diversas categorias. Um deles foi inserido sem um email.
+INSERT INTO JURADOS (CPF, NOME, TELEFONE, EMAIL)
+VALUES (102233, 'João Josephino', '(16)99896-8797', 'jojo@gmail.com');
+
+INSERT INTO JURADOS (CPF, NOME, TELEFONE)
+VALUES (102244, 'Carina Josephina', '(16)99896-8797');
 
 -- Tabela APRESENTACAO 
+-- 	Inserindo duas apresentações, uma solo e outra em grupo (Goku e Naruto)
+INSERT INTO APRESENTACAO (COMPETIDOR, DATA_HORA, MATERIAL_APOIO)
+VALUES (1, TO_DATE('07/12/2019 14:30:00', 'DD/MM/YYYY HH24:MI:SS'), 'DBZ Opening song');
+
+INSERT INTO APRESENTACAO (COMPETIDOR, DATA_HORA, MATERIAL_APOIO)
+VALUES (2, TO_DATE('07/12/2019 15:00:00', 'DD/MM/YYYY HH24:MI:SS'), 'Naruto Opening song');
 
 -- Tabela AVALIA 
+-- 	Inserindo informação sobre quais jurados avalias determinada apresentação
+INSERT INTO AVALIA (COMPETIDOR, DATA_HORA, JURADO)
+VALUES (1, TO_DATE('07/12/2019 14:30:00', 'DD/MM/YYYY HH24:MI:SS'), 102233);
 
--- Tabela AVALIACAO 
+INSERT INTO AVALIA (COMPETIDOR, DATA_HORA, JURADO)
+VALUES (2, TO_DATE('07/12/2019 15:00:00', 'DD/MM/YYYY HH24:MI:SS'), 102244);
 
--- Tabela MATERIAL_APOIO 
+-- Tabela AVALIACAO
+-- 	 Especificando categoria avaliada pelo jurado e qual é a pontuação dada por ele para essa categoria
+INSERT INTO AVALIACAO (COMPETIDOR, DATA_HORA, JURADO, TIPO, NRO_PONTOS)
+VALUES (1, TO_DATE('07/12/2019 14:30:00', 'DD/MM/YYYY HH24:MI:SS'), 102233, 'PERFORMANCE', 22);
+
+INSERT INTO AVALIACAO (COMPETIDOR, DATA_HORA, JURADO, TIPO, NRO_PONTOS)
+VALUES (2, TO_DATE('07/12/2019 15:00:00', 'DD/MM/YYYY HH24:MI:SS'), 102244, 'COSPLAY', 15);
+
+-- Tabela MATERIAL_APOIO
+-- Inserindo informação sobre material de apoio usado em determinadas apresentações. Neste caso o arquivo não foi adicionado mas seria em um caso real.
+INSERT INTO MATERIAL_APOIO (NOME, TIPO_ARQ)
+VALUES ('DBZ Opening song', 'MP3');
+
+INSERT INTO MATERIAL_APOIO (NOME, TIPO_ARQ)
+VALUES ('Naruto Opening song', 'MP3');
 
 -- Tabela PREMIOS 
+-- Adicionando prêmios para competidores 1 e 2 (Goku e Naruto). Foram atribuídos dois prêmios ao competidor do Goku
+INSERT INTO PREMIOS (COMPETIDOR, PREMIO)
+VALUES (1, 'Medalha de Prata por Performance');
+
+INSERT INTO PREMIOS (COMPETIDOR, PREMIO)
+VALUES (1, 'Cookie por atitude');
+
+INSERT INTO PREMIOS (COMPETIDOR, PREMIO)
+VALUES (2, 'Medalha de bronze por Cosplay');
