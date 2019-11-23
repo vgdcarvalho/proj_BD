@@ -19,7 +19,9 @@ CREATE TABLE PALCO(
 /* 
 Criação da tabela para competidor:
 	Note que um competidor precisa necessariamente ter um tipo, seja ele Solo ou Grupo.
-	É realizada uma verificação do tipo inserido (CK_TIPO_COMP) e o valor padrão para tipo é o de competidor Solo.
+	Constraints:
+		CK_TIPO_COMP: É realizada uma verificação do tipo inserido e o valor padrão para tipo é o de competidor Solo.
+		FK_COMPETIDOR: É o número do Palco que vem da tabela PALCO.
 */ 
 CREATE TABLE COMPETIDOR(
     INSCRICAO NUMBER(5) NOT NULL,
@@ -32,6 +34,11 @@ CREATE TABLE COMPETIDOR(
     CONSTRAINT PK_COMPETIDOR PRIMARY KEY (INSCRICAO)
 );
 
+/* 
+Criação da tabela para armazenar informação dos grupos que irão ser apresentar.
+	Constraints:
+		FK_GRUPO: É o número de inscrição de Competidor, pois competidores podem ser indivíduos (na categora Solo) ou grupos.
+*/ 
 CREATE TABLE GRUPO(
     INSCRICAO NUMBER(5) NOT NULL,
     QTD_PESSOAS NUMBER(2),
@@ -40,6 +47,11 @@ CREATE TABLE GRUPO(
     CONSTRAINT PK_GRUPO PRIMARY KEY (INSCRICAO)
 );
 
+/* 
+Criação da tabela para armazenar informação dos cosplayers que irão ser apresentar.
+	Constraints:
+		FK_COSPLAYER: É uma referência ao grupo ao qual o cosplayer faz parte, se fizer parte de algum grupo.
+*/
 CREATE TABLE COSPLAYER(
     CPF NUMBER(14) NOT NULL,
     NOME VARCHAR2(50),
@@ -54,6 +66,11 @@ CREATE TABLE COSPLAYER(
     CONSTRAINT PK_COSPLAYER PRIMARY KEY (CPF)
 );
 
+/* 
+Criação da tabela para armazenar informação daqueles que irão votar em cosplayers para que estes possam se tornar competidores.
+	Constraints:
+		FK_VOTANTE: É uma referência ao cosplayer que recebe o voto.
+*/
 CREATE TABLE VOTANTE(
     CPF NUMBER(14) NOT NULL,
     EMAIL VARCHAR2(40),
@@ -63,6 +80,12 @@ CREATE TABLE VOTANTE(
     CONSTRAINT PK_VOTANTE PRIMARY KEY (CPF)
 );
 
+/* 
+Criação da tabela para armazenar informação dos competidores Solo.
+	Constraints:
+		FK_SOLO_INSC: Refere-se ao número de inscrição como Competidor, pois competidores podem ser Solo ou Grupos.
+		FK_SOLO_COSP: Referência ao cosplayer que tornou-se competidor, utilizando o número de CPF
+*/
 CREATE TABLE SOLO(
     INSCRICAO NUMBER(5) NOT NULL,
     COSPLAYER NUMBER(14) NOT NULL,
@@ -72,13 +95,21 @@ CREATE TABLE SOLO(
 		REFERENCES COSPLAYER (CPF) ON DELETE CASCADE,
     CONSTRAINT PK_SOLO PRIMARY KEY (INSCRICAO)
 );
-
+/* 
+Criação da tabela para armazenar informação dos camarins.
+*/
 CREATE TABLE CAMARIM(
     NUMERO NUMBER(4) NOT NULL,
     SETOR VARCHAR2(3),
     CONSTRAINT PK_CAMARIM PRIMARY KEY (NUMERO)
 );
 
+/* 
+Criação da tabela para armazenar informação sobre a utilização dos camarins, como que competidor está alocado a qual camarim e quantas pessoas utilizam.
+	Constraints:
+		FK_UTILIZA_COMP: Refere-se ao competidor alocado ao camarim em questão.
+		FK_UTILIZA_CAMA: Referência ao camarim sendo utilizado.
+*/
 CREATE TABLE UTILIZA(
     COMPETIDOR NUMBER(5) NOT NULL,
     CAMARIM NUMBER(4) NOT NULL,
@@ -90,6 +121,9 @@ CREATE TABLE UTILIZA(
     CONSTRAINT PK_UTILIZA PRIMARY KEY (COMPETIDOR, CAMARIM)
 );
 
+/* 
+Criação da tabela para armazenar informação sobre os hoteis utilizados para alocar competidores no campeonato.
+*/
 CREATE TABLE HOTEL(
     CNPJ NUMBER(20) NOT NULL,
     NOME VARCHAR2(50),
@@ -98,13 +132,21 @@ CREATE TABLE HOTEL(
     CONSTRAINT PK_HOTEL PRIMARY KEY (CNPJ)
 );
 
+/* 
+Criação da tabela para armazenar informação sobre a alocação de competidores nos hoteis utilizados durante o campeonato.
+	Constraints:
+		FK_HOSPEDA_COMP: Refere-se ao competidor alocado ao hotel em questão.
+		FK_HOSPEDA_HOT: Refere-se ao hotel que hospeda o competidor.
+*/
 CREATE TABLE HOSPEDA(
     COMPETIDOR NUMBER(5) NOT NULL,
     HOTEL NUMBER(20),
     QUARTO NUMBER(4),
     QTD_HOSPEDES NUMBER(2),
-    CONSTRAINT FK_HOSPEDA FOREIGN KEY (HOTEL) 
+    CONSTRAINT FK_HOSPEDA_HOT FOREIGN KEY (HOTEL) 
 		REFERENCES HOTEL (CNPJ) ON DELETE CASCADE,
+	CONSTRAINT FK_HOSPEDA_COMP FOREIGN KEY (COMPETIDOR) 
+		REFERENCES COMPETIDOR (INSCRICAO) ON DELETE CASCADE,
     CONSTRAINT PK_HOSPEDA PRIMARY KEY (COMPETIDOR)
 );
 
@@ -112,6 +154,8 @@ CREATE TABLE HOSPEDA(
 Criação de tablea para as fotos:
     Note que há um único arquivo armazenado. Este arquivo é uma pasta compactada contendo todas as fotos do competidor e copslayer.
     Outras informações sobre as fotos se encontram nos outros atributos, como tamanho total, quantidade de fotos e nome do fotógrafo responsável.
+	Contraints:
+		FK_FOTOS: Refere-se ao cosplayer ao qual pertencem as fotos armazenadas
 */
 CREATE TABLE FOTOS(
     COSPLAYER NUMBER(14) NOT NULL,
@@ -124,9 +168,11 @@ CREATE TABLE FOTOS(
     CONSTRAINT PK_FOTOS PRIMARY KEY (COSPLAYER)
 );
 
-/*/
+/*
 Criação de tabela para funcionários:
     Note que é possível que haja um funcionário sem tipo mas caso um tipo seja definido ele precisa ser Apresentador ou Técnico.
+	Constraints:
+		CK_TIPO_FUNC: Verificação do tipo de funcionário, que pode ser APRESENTADOR ou TÉCNICO
 */
 CREATE TABLE FUNCIONARIOS(
     CPF NUMBER(14) NOT NULL,
