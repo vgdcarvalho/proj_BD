@@ -186,6 +186,12 @@ CREATE TABLE FUNCIONARIOS(
     CONSTRAINT PK_FUNC PRIMARY KEY (CPF)
 );
 
+/*
+Criação de tabela para atribuir funcionários a determinados palcos:
+	Constraints:
+		FK_POSSUI_PALCO: Palco em questão, vindo da tabela PALCO
+		FK_POSSUI_FUNC: Funcionário alocado neste palco, vindo da tabela FUNCIONARIOS
+*/
 CREATE TABLE POSSUI(
     PALCO NUMBER(3) NOT NULL,
     FUNCIONARIO NUMBER(14) NOT NULL,
@@ -196,6 +202,11 @@ CREATE TABLE POSSUI(
     CONSTRAINT PK_POSSUI PRIMARY KEY (PALCO, FUNCIONARIO)
 );
 
+/*
+Criação de tabela para detalhar especialização de um funcionário que é técnico:
+	Constraints:
+		FK_TECNICO: Funcionário em questão, vindo da tabela FUNCIONARIOS
+*/
 CREATE TABLE TECNICO(
     CPF NUMBER(14) NOT NULL,
     ESPECIALIZACAO VARCHAR2(30),
@@ -204,6 +215,11 @@ CREATE TABLE TECNICO(
     CONSTRAINT PK_TECNICO PRIMARY KEY (CPF)
 );
 
+/*
+Criação de tabela para detalhar especialização de um funcionário que é apresentador:
+	Constraints:
+		FK_APRESENTADOR: Funcionário em questão, vindo da tabela FUNCIONARIOS
+*/
 CREATE TABLE APRESENTADOR(
     CPF NUMBER(14) NOT NULL,
     TEMPO_PALCO NUMBER(3),
@@ -212,6 +228,9 @@ CREATE TABLE APRESENTADOR(
     CONSTRAINT PK_APRESENTADOR PRIMARY KEY (CPF)
 );
 
+/*
+Criação de tabela para armazenar informação sobre os jurados do campeonato
+*/
 CREATE TABLE JURADOS(
     CPF NUMBER(14) NOT NULL,
     NOME VARCHAR2(50),
@@ -220,6 +239,11 @@ CREATE TABLE JURADOS(
     CONSTRAINT PK_JURADOS PRIMARY KEY (CPF)
 );
 
+/*
+Criação de tabela para armazenar detalhes sobre as apresentações
+	Constraints:
+		FK_APRESENTACAO: Referência ao competidor (solo ou grupo) de determinada aresentação, vindo da tabela COMPETIDOR
+*/
 CREATE TABLE APRESENTACAO(
     COMPETIDOR NUMBER(5) NOT NULL,
     DATA_HORA DATE NOT NULL,
@@ -229,6 +253,12 @@ CREATE TABLE APRESENTACAO(
     CONSTRAINT PK_APRESENTACAO PRIMARY KEY (COMPETIDOR, DATA_HORA)
 );
 
+/*
+Criação de tabela para ligar jurados e competidores, em determinada apresentação
+	Constraints:
+		FK_AVALIA_APR: Referência aos competidores em determinadas apresentações, vindo da tabela APRESENTAÇÂO 
+		FK_AVALIA_JUR: Referência aos jurados que farão a avaliação da apresetação
+*/
 CREATE TABLE AVALIA(
     COMPETIDOR NUMBER(5) NOT NULL,
     DATA_HORA DATE NOT NULL,
@@ -240,6 +270,13 @@ CREATE TABLE AVALIA(
     CONSTRAINT PK_AVALIA PRIMARY KEY (COMPETIDOR, DATA_HORA, JURADO)
 );
 
+/*
+Criação de tabela para armazenar dados da avaliação de uma determinada apresentação em determinada categoria de avaliação
+	Constraints:
+		CK_TIPO_AVALIACAO: Verificação do tipo/categoria sendo avaliada que só pode ser 'PERFORMANCE', 'COSPLAY' ou 'CRIATIVIDADE'
+		FK_AVALIACAO_APR: Referência aos competidores em determinadas apresentações, vindo da tabela APRESENTAÇÂO
+		FK_AVALIACAO_JUR: Referência aos jurados que farão a avaliação da apresetação
+*/
 CREATE TABLE AVALIACAO(
     COMPETIDOR NUMBER(5) NOT NULL,
     DATA_HORA DATE NOT NULL,
@@ -254,6 +291,11 @@ CREATE TABLE AVALIACAO(
     CONSTRAINT PK_AVALIACAO PRIMARY KEY (COMPETIDOR, DATA_HORA, JURADO, TIPO)
 );
 
+/*
+Criação de tabela para armazenar dados do material de apoio usado por um competidor em um apresentação
+	Constraints:
+		FK_MAT_APOIO: Nome/Identificação do material de apoio, vindo da tabela APRESENTAÇÂO
+*/
 CREATE TABLE MATERIAL_APOIO(
     NOME VARCHAR2(50) NOT NULL,
     TIPO_ARQ VARCHAR2(10),
@@ -262,7 +304,13 @@ CREATE TABLE MATERIAL_APOIO(
 		REFERENCES APRESENTACAO (MATERIAL_APOIO) ON DELETE CASCADE,
     CONSTRAINT PK_MAT_APOIO PRIMARY KEY (NOME)
 );
-				  
+
+/*
+Criação de tabela para armazenar dados dos prêmios que um competidor recebeu
+	Note que um mesmo copetidor pode receber vários prêmios
+	Constraints:
+		FK_PREMIOS_COMP: Referência ao competidor que recebeu o prêmio em questão
+*/				  
 CREATE TABLE PREMIOS(
     COMPETIDOR NUMBER(5),
     PREMIO VARCHAR2(100),
