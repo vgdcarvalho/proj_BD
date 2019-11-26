@@ -1,7 +1,7 @@
 /*
 SCRIPT PARA INSERÇÂO DE TUPLAS AO BANCO DE DADOS
 
-Disciplina: SCC-240 - Base de Dados (2019/2)
+Disciplina: SCC-540 - Base de Dados (2019/2)
 Projeto: Game XP
 Foco: Gerenciamento de competição de cosplay
 Alunos:
